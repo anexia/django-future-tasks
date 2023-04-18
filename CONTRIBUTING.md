@@ -29,3 +29,7 @@ unit tests that validate implemented features and the presence or lack of defect
 Additionally, the code should follow any stylistic and architectural guidelines
 prescribed by the project. In the absence of such guidelines, mimic the styles
 and patterns in the existing code-base.
+
+### Contribution guidelines
+ - Your code should follow PEP 8 -- Style Guide for Python Code
+ - Your changes should be covered by unit-tests
