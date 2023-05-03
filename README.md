@@ -1,38 +1,63 @@
-## PROJECT NAME
+# Django Future Tasks
 
-A short description of what this project does.
+[![PyPI version](https://img.shields.io/pypi/v/django-future-tasks.svg)](https://pypi.org/project/django-future-tasks/)
+[![Run linter and tests](https://github.com/anexia/django-future-tasks/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/anexia/django-future-tasks/actions/workflows/test.yml)
+[![Codecov](https://img.shields.io/codecov/c/gh/anexia/django-future-tasks)](https://codecov.io/gh/anexia/django-future-tasks)
 
-## Goals
+A library to create a task with a specified execution/start time and schedule it to run in the future.
 
-It is a good idea to provide a mission statement for your project, enshrining
-what the project wants to accomplish so that as more people join your project
-everyone can work in alignment.
+## Installation
 
-### Installation
+1. Install using pip:
 
-Instructions for how to download/install the code onto your machine.
-
-Example:
-```
-./install myProject --save
+```sh
+pip install django-future-tasks
 ```
 
-### Usage
+2. Add the library to your INSTALLED_APPS list.
 
-Usage instructions for your code.
-
-Example:
-
-```
-var myMod = require('mymodule');
-
-myMod.foo('hi');
+```python
+INSTALLED_APPS = [
+    ...
+    'django_future_tasks',
+    ...
+]
 ```
 
-### Contributing
+4. Configure the task types in your `settings.py` according to your needs:
 
-Contributions are welcomed! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
+```python
+# within settings.py
 
-### Licensing
+FUTURE_TASK_TYPE_ONE = "task_one"
+FUTURE_TASK_TYPE_TWO = "task_two"
 
-See [LICENSE](LICENSE) for more information.
+FUTURE_TASK_TYPES = (
+    (FUTURE_TASK_TYPE_ONE, _("Task 1")),
+    (FUTURE_TASK_TYPE_TWO, _("Task 2")),
+)
+```
+
+## Usage
+
+To receive a signal, register a receiver function using the signal `future_task_signal` and the task type as sender.
+The `instance` is the FutureTask object.
+
+```python
+@receiver(future_task_signal, sender=intern(settings.FUTURE_TASK_TYPE_ONE))
+def my_function(sender, instance, **kwargs):
+    # do something
+```
+
+**Command for starting the future task processing**
+```bash
+python manage.py process_future_tasks
+```
+
+## Django Compatibility Matrix
+
+If your project uses an older verison of Django or Django Rest Framework, you can choose an older version of this project.
+
+| This Project | Python Version       | Django Version |
+|--------------|----------------------|----------------|
+| 1.0.*        | 3.8, 3.9, 3.10, 3.11 | 3.2, 4.0, 4.1  |

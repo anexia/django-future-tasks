@@ -1,0 +1,11 @@
+# Package and package dependencies
+-e .
+
+# Development dependencies
+coverage>=7.2.3,<7.3
+
+# Linters and formatters
+pre-commit>=3.2.2,<3.3
+
+# TestApp dependencies
+django>=3.2,<4
