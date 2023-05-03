@@ -48,4 +48,4 @@ class TestFutureTasks(TestCase):
         call_command("process_future_tasks", onetimerun=True)
         task = FutureTask.objects.get(pk=self.task_error.pk)
         self.assertEqual(task.status, FutureTask.FUTURE_TASK_STATUS_ERROR)
-        self.assertEqual(task.result, {"error": "task error"})
+        self.assertEqual(task.result["args"], ["task error"])
