@@ -1,6 +1,8 @@
 import logging
 import signal
+import sys
 import time
+import traceback
 from sys import intern
 
 from django import db
@@ -39,21 +41,8 @@ class Command(BaseCommand):
         )
 
     @staticmethod
-    def process_task(task):
-        results = future_task_signal.send(sender=intern(task.type), instance=task)
-        for receiver, response in results:
-            if isinstance(response, Exception):
-                logger.exception(
-                    "Exception occurred while processing task {} of type {}".format(
-                        task.id, task.type
-                    )
-                )
-                task.status = FutureTask.FUTURE_TASK_STATUS_ERROR
-                task.result = {
-                    "error": str(response),
-                }
-                return False
-        return True
+    def _convert_exception_args(args):
+        return [str(arg) for arg in args]
 
     def handle_tick(self):
         task_list = self.tasks_for_processing()
@@ -62,8 +51,20 @@ class Command(BaseCommand):
         for task in task_list:
             task.status = FutureTask.FUTURE_TASK_STATUS_IN_PROGRESS
             task.save()
-            if self.process_task(task):
+            try:
+                future_task_signal.send(sender=intern(task.type), instance=task)
                 task.status = FutureTask.FUTURE_TASK_STATUS_DONE
+            except Exception as exc:
+                task.status = FutureTask.FUTURE_TASK_STATUS_ERROR
+                task.result = {
+                    "exception": "An exception of type {0} occurred.".format(
+                        type(exc).__name__
+                    ),
+                    "args": self._convert_exception_args(exc.args),
+                    "traceback": traceback.format_exception(
+                        *sys.exc_info(), limit=None, chain=None
+                    ),
+                }
             task.save()
 
         time.sleep(self.tick)

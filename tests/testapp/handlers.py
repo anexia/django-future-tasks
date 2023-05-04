@@ -18,4 +18,4 @@ def my_task_function2(sender, instance, **kwargs):
 
 @receiver(future_task_signal, sender=intern(settings.FUTURE_TASK_TYPE_ERROR))
 def my_task_function_error(sender, instance, **kwargs):
-    return Exception("task error")
+    raise Exception("task error")
