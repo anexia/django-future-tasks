@@ -10,11 +10,16 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name="django-future-tasks",
-    version=os.getenv("PACKAGE_VERSION", "1.0.0").replace("refs/tags/", ""),
+    version=os.getenv("PACKAGE_VERSION", "1.1.0").replace("refs/tags/", ""),
     packages=find_packages(),
     include_package_data=True,
+    install_requires=[
+        "croniter>=1.4.1,<1.5",
+        "cron-descriptor>=1.4.0,<1.5",
+        "django-cronfield @ git+https://github.com/galipnik/django-cronfield@updates-for-django-3.2",
+    ],
     license="MIT License",
-    description="A library to create a task with a specified execution/start time and schedule it to run in the future.",
+    description="A library to create periodic, cron-like tasks or single tasks with a specified execution/start time and schedule it to run in the future.",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/anexia/django-future-tasks",
