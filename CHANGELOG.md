@@ -6,10 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0]
+## [1.1.0]
 
 ### Added
-- Initial setup
+- Support of periodic, cron-like tasks.
+
+## [1.0.0] - 2023-05-05
+
+### Added
+- Initial setup.
 
 [Unreleased]: https://github.com/anexia/django-future-tasks/compare/1.0.0...HEAD
+[1.1.0]: https://github.com/anexia/django-future-tasks/releases/tag/1.1.0
 [1.0.0]: https://github.com/anexia/django-future-tasks/releases/tag/1.0.0

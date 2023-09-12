@@ -4,7 +4,7 @@
 [![Run linter and tests](https://github.com/anexia/django-future-tasks/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/anexia/django-future-tasks/actions/workflows/test.yml)
 [![Codecov](https://img.shields.io/codecov/c/gh/anexia/django-future-tasks)](https://codecov.io/gh/anexia/django-future-tasks)
 
-A library to create a task with a specified execution/start time and schedule it to run in the future.
+A library to create periodic, cron-like tasks or single tasks with a specified execution/start time and schedule it to run in the future.
 
 ## Installation
 
@@ -54,10 +54,16 @@ def my_function(sender, instance, **kwargs):
 python manage.py process_future_tasks
 ```
 
+**Command for starting the periodic future task processing**
+```bash
+python manage.py populate_periodic_future_tasks
+```
+
 ## Django Compatibility Matrix
 
 If your project uses an older verison of Django or Django Rest Framework, you can choose an older version of this project.
 
 | This Project | Python Version       | Django Version |
 |--------------|----------------------|----------------|
+| 1.1.*        | 3.8, 3.9, 3.10, 3.11 | 3.2, 4.1, 4.2  |
 | 1.0.*        | 3.8, 3.9, 3.10, 3.11 | 3.2, 4.0, 4.1  |
