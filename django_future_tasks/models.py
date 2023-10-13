@@ -83,6 +83,9 @@ class PeriodicFutureTask(models.Model):
     )
     cron_string = CronField()
     is_active = models.BooleanField(_("Active"), default=True)
+    max_number_of_executions = models.IntegerField(
+        _("Maximal number of executions"), null=True, blank=True
+    )
     __original_is_active = None
     last_task_creation = models.DateTimeField(
         _("Last single task creation"),
@@ -91,14 +94,18 @@ class PeriodicFutureTask(models.Model):
     )
 
     def next_planned_execution(self):
-        if self.is_active:
+        if not self.is_active or (
+            self.max_number_of_executions is not None
+            and FutureTask.objects.filter(periodic_parent_task=self.pk).count()
+            >= self.max_number_of_executions
+        ):
+            return None
+        else:
             now = datetime.datetime.now()
             return format(
                 croniter.croniter(self.cron_string, now).get_next(datetime.datetime),
                 settings.DATETIME_FORMAT,
             )
-        else:
-            return None
 
     def cron_humnan_readable(self):
         descriptor = ExpressionDescriptor(
