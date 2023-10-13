@@ -2,6 +2,7 @@ import logging
 import signal
 import sys
 import time
+import timeit
 import traceback
 from sys import intern
 
@@ -52,7 +53,9 @@ class Command(BaseCommand):
             task.status = FutureTask.FUTURE_TASK_STATUS_IN_PROGRESS
             task.save()
             try:
+                start_time = timeit.default_timer()
                 future_task_signal.send(sender=intern(task.type), instance=task)
+                task.execution_time = timeit.default_timer() - start_time
                 task.status = FutureTask.FUTURE_TASK_STATUS_DONE
             except Exception as exc:
                 task.status = FutureTask.FUTURE_TASK_STATUS_ERROR

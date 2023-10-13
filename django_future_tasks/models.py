@@ -57,6 +57,7 @@ class FutureTask(models.Model):
         blank=True,
         null=True,
     )
+    execution_time = models.FloatField(blank=True, null=True, help_text="in seconds")
 
     periodic_parent_task = models.ForeignKey(
         "PeriodicFutureTask", on_delete=models.CASCADE, null=True, default=None
