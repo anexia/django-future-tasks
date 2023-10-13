@@ -19,6 +19,8 @@ logger = logging.getLogger("process_future_tasks")
 class Command(BaseCommand):
     help = "Process future tasks from database"
 
+    current_task_pk = None
+
     def add_arguments(self, parser):
         parser.add_argument(
             "--onetimerun",
@@ -29,6 +31,12 @@ class Command(BaseCommand):
         )
 
     def _handle_termination(self, *args, **kwargs):
+        try:
+            current_task = FutureTask.objects.get(pk=self.current_task_pk)
+            current_task.status = FutureTask.FUTURE_TASK_STATUS_INTERRUPTED
+            current_task.save()
+        except FutureTask.DoesNotExist:
+            pass
         self._running = False
 
     def _handle_options(self, options):
@@ -52,6 +60,7 @@ class Command(BaseCommand):
         for task in task_list:
             task.status = FutureTask.FUTURE_TASK_STATUS_IN_PROGRESS
             task.save()
+            self.current_task_pk = task.pk
             try:
                 start_time = timeit.default_timer()
                 future_task_signal.send(sender=intern(task.type), instance=task)
@@ -68,6 +77,7 @@ class Command(BaseCommand):
                         *sys.exc_info(), limit=None, chain=None
                     ),
                 }
+            self.current_task_pk = None
             task.save()
 
         time.sleep(self.tick)

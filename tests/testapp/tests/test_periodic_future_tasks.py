@@ -6,12 +6,12 @@ from django.utils import timezone
 
 from django_future_tasks.models import FutureTask, PeriodicFutureTask
 from tests.core import settings
-from tests.testapp.mixins import PeriodicTaskCommandMixin
+from tests.testapp.mixins import PopulatePeriodicTaskCommandMixin
 
 SLEEP_TIME = 1.1
 
 
-class TestPeriodicFutureTasks(PeriodicTaskCommandMixin, TransactionTestCase):
+class TestPeriodicFutureTasks(PopulatePeriodicTaskCommandMixin, TransactionTestCase):
     def setUp(self):
         super().setUp()
 
