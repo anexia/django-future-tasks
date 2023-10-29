@@ -26,6 +26,10 @@ class Command(BaseCommand):
     def periodic_tasks_for_processing():
         return PeriodicFutureTask.objects.filter(is_active=True)
 
+    @staticmethod
+    def number_of_corresponding_single_tasks(p_task):
+        return FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count()
+
     def update_last_task_creation(self):
         now = timezone.now()
         for p_task in self.periodic_tasks_for_processing():
@@ -48,6 +52,14 @@ class Command(BaseCommand):
             relevant_dts = croniter_range(last_population, now, p_task.cron_string)
 
             for dt in relevant_dts:
+                if (
+                    p_task.max_number_of_executions is not None
+                    and self.number_of_corresponding_single_tasks(p_task)
+                    >= p_task.max_number_of_executions
+                ):
+                    p_task.is_active = False
+                    break
+
                 dt_format = "%Y-%m-%d %H:%M%z"
                 task_id = f"{p_task.periodic_task_id} ({dt.strftime(dt_format)})"
                 FutureTask.objects.create(
