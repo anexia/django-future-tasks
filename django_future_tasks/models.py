@@ -19,12 +19,14 @@ from django.utils.translation import gettext_lazy as _
 class FutureTask(models.Model):
     FUTURE_TASK_STATUS_OPEN = "open"
     FUTURE_TASK_STATUS_IN_PROGRESS = "in_progress"
+    FUTURE_TASK_STATUS_INTERRUPTED = "interrupted"
     FUTURE_TASK_STATUS_DONE = "done"
     FUTURE_TASK_STATUS_ERROR = "error"
 
     FUTURE_TASK_STATUS = (
         (FUTURE_TASK_STATUS_OPEN, _("Status open")),
         (FUTURE_TASK_STATUS_IN_PROGRESS, _("Status in progress")),
+        (FUTURE_TASK_STATUS_INTERRUPTED, _("Status interrupted")),
         (FUTURE_TASK_STATUS_DONE, _("Status done")),
         (FUTURE_TASK_STATUS_ERROR, _("Status error")),
     )
