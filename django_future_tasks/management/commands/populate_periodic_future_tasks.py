@@ -56,7 +56,7 @@ class Command(BaseCommand):
                     p_task.max_number_of_executions is not None
                     and self.number_of_corresponding_single_tasks(p_task)
                     >= p_task.max_number_of_executions
-                ):
+                ) or (p_task.end_time is not None and p_task.end_time < dt):
                     p_task.is_active = False
                     break
 
