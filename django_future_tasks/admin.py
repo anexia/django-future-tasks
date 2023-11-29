@@ -32,6 +32,9 @@ class PeriodicFutureTaskAdminForm(forms.ModelForm):
         model = PeriodicFutureTask
         exclude = ()
 
+    class Media:
+        css = {"all": ("django_future_tasks/cronfield.css",)}
+
 
 class FutureTaskInline(admin.TabularInline):
     verbose_name = "Corresponding single task"
