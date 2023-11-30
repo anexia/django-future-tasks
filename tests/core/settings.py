@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_future_tasks",
+    "cronfield",
     "testapp",
 ]
 
@@ -109,3 +110,7 @@ FUTURE_TASK_TYPES = (
     (FUTURE_TASK_TYPE_ERROR, "Task Error"),
     (FUTURE_TASK_TYPE_INTERRUPTION, "Task Interruption"),
 )
+
+STATIC_URL = "/static/"
+ROOT_URLCONF = "core.urls"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")

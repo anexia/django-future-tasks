@@ -13,4 +13,4 @@ django>=3.2,<4
 # Cron
 croniter>=1.4.1,<1.5
 cron-descriptor>=1.4.0, <1.5
-git+https://github.com/galipnik/django-cronfield@updates-for-django-3.2
+django-cronfield>=0.2.0,<0.3

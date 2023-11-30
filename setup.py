@@ -16,7 +16,7 @@ setup(
     install_requires=[
         "croniter>=1.4.1,<1.5",
         "cron-descriptor>=1.4.0,<1.5",
-        "django-cronfield @ git+https://github.com/galipnik/django-cronfield@updates-for-django-3.2",
+        "django-cronfield>=0.2.0,<0.3",
     ],
     license="MIT License",
     description="A library to create periodic, cron-like tasks or single tasks with a specified execution/start time and schedule it to run in the future.",

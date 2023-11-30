@@ -1,0 +1,21 @@
+.cc_wrapper .cc_element {
+	width: 160px;
+}
+
+.cc_wrapper .cc_element select {
+	margin-bottom: 2px;
+}
+
+.cc_wrapper .cc_element .button {
+	width: 76px;
+	margin: 2px;
+}
+
+.cc_wrapper .cc_element .fleft {
+	width: 75px;
+	margin: 2px;
+}
+
+.cc_wrapper .cc_element .fright {
+	margin: 2px;
+}
