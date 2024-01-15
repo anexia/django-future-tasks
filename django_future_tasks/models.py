@@ -1,20 +1,14 @@
 import datetime
-import uuid
 
 import croniter
-from cron_descriptor import (
-    CasingTypeEnum,
-    DescriptionTypeEnum,
-    ExpressionDescriptor,
-    Options,
-)
+from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from cronfield.models import CronField
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import JSONField, Q
+from django.utils import timezone
 from django.utils.dateformat import format
-from django.utils.timezone import utc
 from django.utils.translation import gettext_lazy as _
 
 
@@ -97,9 +91,9 @@ class PeriodicFutureTask(models.Model):
     )
 
     def next_planned_execution(self):
-        now = datetime.datetime.now()
-        next_planned_execution = utc.localize(
-            croniter.croniter(self.cron_string, now).get_next(datetime.datetime)
+        now = timezone.now()
+        next_planned_execution = croniter.croniter(self.cron_string, now).get_next(
+            timezone.datetime
         )
         if (
             not self.is_active
@@ -111,15 +105,13 @@ class PeriodicFutureTask(models.Model):
             or (
                 self.end_time is not None
                 and self.end_time
-                < utc.localize(
-                    croniter.croniter(self.cron_string, now).get_next(datetime.datetime)
-                )
+                < croniter.croniter(self.cron_string, now).get_next(timezone.datetime)
             )
         ):
             return None
 
         return format(
-            next_planned_execution,
+            timezone.template_localtime(next_planned_execution),
             settings.DATETIME_FORMAT,
         )
 
