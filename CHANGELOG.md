@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2]
+
+### Fixed
+
+- Fixes compatibility between django 3.2 and 4.2 for next planned execution in admin
+
+## [1.1.1]
+
+### Fixed
+
+- Use custom css to fix external depenceny upload restriction
+
 ## [1.1.0]
 
 ### Added
@@ -16,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial setup.
 
-[Unreleased]: https://github.com/anexia/django-future-tasks/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/anexia/django-future-tasks/compare/1.1.2...HEAD
+[1.1.2]: https://github.com/anexia/django-future-tasks/releases/tag/1.1.2
+[1.1.1]: https://github.com/anexia/django-future-tasks/releases/tag/1.1.1
 [1.1.0]: https://github.com/anexia/django-future-tasks/releases/tag/1.1.0
 [1.0.0]: https://github.com/anexia/django-future-tasks/releases/tag/1.0.0
