@@ -51,14 +51,12 @@ class FutureTaskInline(admin.TabularInline):
 @admin.register(PeriodicFutureTask)
 class PeriodicFutureTaskAdmin(admin.ModelAdmin):
     readonly_fields = [
-        "cron_humnan_readable",
         "last_task_creation",
         "next_planned_execution",
     ]
     list_display = [
         "periodic_task_id",
         "cron_string",
-        "cron_humnan_readable",
         "is_active",
         "type",
         "next_planned_execution",
