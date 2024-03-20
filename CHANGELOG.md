@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for seconds in cron-like tasks
+
+### Removed
+
+- Human readable cron name due to incompatibility of [cron-descriptor](https://github.com/Salamek/cron-descriptor) and [croniter](https://github.com/kiorky/croniter) for seconds
+- `cron-descriptor` from requirements
+
 ## [1.1.2]
 
 ### Fixed

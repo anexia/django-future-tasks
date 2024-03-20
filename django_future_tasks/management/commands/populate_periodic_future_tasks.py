@@ -60,7 +60,7 @@ class Command(BaseCommand):
                     p_task.is_active = False
                     break
 
-                dt_format = "%Y-%m-%d %H:%M%z"
+                dt_format = "%Y-%m-%d %H:%M:%S%z"
                 task_id = f"{p_task.periodic_task_id} ({dt.strftime(dt_format)})"
                 FutureTask.objects.create(
                     task_id=task_id,
