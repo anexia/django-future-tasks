@@ -8,7 +8,7 @@ coverage>=7.2.3,<7.3
 pre-commit>=3.2.2,<3.3
 
 # TestApp dependencies
-django>=3.2,<4
+django>=4.2,<5
 
 # Cron
 croniter>=1.4.1,<1.5

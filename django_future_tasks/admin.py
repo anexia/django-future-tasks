@@ -36,18 +36,6 @@ class PeriodicFutureTaskAdminForm(forms.ModelForm):
         css = {"all": ("django_future_tasks/cronfield.css",)}
 
 
-class FutureTaskInline(admin.TabularInline):
-    verbose_name = "Corresponding single task"
-    verbose_name_plural = "Corresponding single tasks"
-    model = FutureTask
-    fields = ["task_id", "eta", "status"]
-    readonly_fields = ["task_id", "eta", "status"]
-    extra = 0
-    classes = ["collapse"]
-    ordering = ["-eta"]
-    max_num = 100
-
-
 @admin.register(PeriodicFutureTask)
 class PeriodicFutureTaskAdmin(admin.ModelAdmin):
     readonly_fields = [
@@ -62,6 +50,5 @@ class PeriodicFutureTaskAdmin(admin.ModelAdmin):
         "next_planned_execution",
     ]
     list_editable = ["cron_string", "is_active"]
-    inlines = [FutureTaskInline]
     list_filter = ["type", "is_active"]
     form = PeriodicFutureTaskAdminForm

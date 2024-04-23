@@ -23,8 +23,13 @@ def _validate_CRON_string(value):
             raise ValidationError("Incorrect value {} in column {}".format(c, i + 1))
 
 
-class FuturetaskCronField(CronField):
+class FutureTaskCronField(CronField):
     def validate(self, value, model_instance):
         super(CronField, self).validate(value, model_instance)
         if self.editable:  # Skip validation for non-editable fields.
             _validate_CRON_string(value)
+
+    def __init__(self, *args, **kwargs):
+        kwargs["default"] = "* * * * * *"
+        kwargs["help_text"] = "Minute Hour Day Month Weekday Second"
+        super().__init__(*args, **kwargs)

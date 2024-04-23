@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.utils.dateformat import format
 from django.utils.translation import gettext_lazy as _
 
-from .fields import FuturetaskCronField
+from .fields import FutureTaskCronField
 
 
 class FutureTask(models.Model):
@@ -77,7 +77,7 @@ class PeriodicFutureTask(models.Model):
         blank=True,
         null=True,
     )
-    cron_string = FuturetaskCronField()
+    cron_string = FutureTaskCronField()
     is_active = models.BooleanField(_("Active"), default=True)
     max_number_of_executions = models.IntegerField(
         _("Maximal number of executions"), null=True, blank=True
