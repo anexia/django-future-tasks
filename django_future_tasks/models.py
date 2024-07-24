@@ -1,8 +1,6 @@
 import datetime
 
 import croniter
-from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
-from cronfield.models import CronField
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -10,6 +8,8 @@ from django.db.models import JSONField, Q
 from django.utils import timezone
 from django.utils.dateformat import format
 from django.utils.translation import gettext_lazy as _
+
+from .fields import FutureTaskCronField
 
 
 class FutureTask(models.Model):
@@ -77,7 +77,7 @@ class PeriodicFutureTask(models.Model):
         blank=True,
         null=True,
     )
-    cron_string = CronField()
+    cron_string = FutureTaskCronField()
     is_active = models.BooleanField(_("Active"), default=True)
     max_number_of_executions = models.IntegerField(
         _("Maximal number of executions"), null=True, blank=True
@@ -114,14 +114,6 @@ class PeriodicFutureTask(models.Model):
             timezone.template_localtime(next_planned_execution),
             settings.DATETIME_FORMAT,
         )
-
-    def cron_humnan_readable(self):
-        descriptor = ExpressionDescriptor(
-            expression=self.cron_string,
-            casing_type=CasingTypeEnum.Sentence,
-            use_24hour_time_format=False,
-        )
-        return descriptor.get_description()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
