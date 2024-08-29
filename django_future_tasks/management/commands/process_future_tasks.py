@@ -77,6 +77,7 @@ class Command(BaseCommand):
                         *sys.exc_info(), limit=None, chain=None
                     ),
                 }
+                logger.exception(exc)
             self.current_task_pk = None
             task.save()
 
