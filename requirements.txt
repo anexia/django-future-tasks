@@ -3,6 +3,7 @@
 
 # Development dependencies
 coverage>=7.2.3,<7.3
+time-machine>=2.15.0,<2.17.0
 
 # Linters and formatters
 pre-commit>=3.2.2,<3.3
