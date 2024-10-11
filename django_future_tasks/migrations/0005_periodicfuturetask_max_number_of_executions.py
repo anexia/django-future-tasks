@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
             model_name="periodicfuturetask",
             name="max_number_of_executions",
             field=models.IntegerField(
-                blank=True, null=True, verbose_name="Maximal number of executions"
+                blank=True,
+                null=True,
+                verbose_name="Maximal number of executions",
             ),
         ),
     ]

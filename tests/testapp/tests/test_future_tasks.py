@@ -23,15 +23,21 @@ class TestFutureTasks(ProcessTasksCommandMixin, TransactionTestCase):
         tomorrow = today + timedelta(days=1)
 
         self.task1 = FutureTask.objects.create(
-            task_id="task1", eta=yesterday, type=settings.FUTURE_TASK_TYPE_ONE
+            task_id="task1",
+            eta=yesterday,
+            type=settings.FUTURE_TASK_TYPE_ONE,
         )
 
         self.task2 = FutureTask.objects.create(
-            task_id="task2", eta=tomorrow, type=settings.FUTURE_TASK_TYPE_TWO
+            task_id="task2",
+            eta=tomorrow,
+            type=settings.FUTURE_TASK_TYPE_TWO,
         )
 
         self.task_error = FutureTask.objects.create(
-            task_id="task_error", eta=yesterday, type=settings.FUTURE_TASK_TYPE_ERROR
+            task_id="task_error",
+            eta=yesterday,
+            type=settings.FUTURE_TASK_TYPE_ERROR,
         )
 
     def test_future_task_process_task(self):
@@ -76,7 +82,9 @@ class TestFutureTaskInterruption(ProcessTasksCommandMixin, TransactionTestCase):
         yesterday = timezone.now() - timedelta(days=1)
 
         self.task1 = FutureTask.objects.create(
-            task_id="task", eta=yesterday, type=settings.FUTURE_TASK_TYPE_INTERRUPTION
+            task_id="task",
+            eta=yesterday,
+            type=settings.FUTURE_TASK_TYPE_INTERRUPTION,
         )
 
     def test_future_task_process_task(self):
@@ -108,7 +116,9 @@ class TestFutureTasksOnetimeRun(TestCase):
         )
 
         self.task2 = FutureTask.objects.create(
-            task_id="onetimerun_task2", eta=tomorrow, type=settings.FUTURE_TASK_TYPE_TWO
+            task_id="onetimerun_task2",
+            eta=tomorrow,
+            type=settings.FUTURE_TASK_TYPE_TWO,
         )
 
         self.task_error = FutureTask.objects.create(

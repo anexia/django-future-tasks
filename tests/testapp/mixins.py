@@ -17,7 +17,7 @@ class TestThread(Thread):
         connection.close()
 
 
-class ProcessTasksCommandMixin(object):
+class ProcessTasksCommandMixin:
     @classmethod
     def setUpClass(cls):
         assert (
@@ -42,7 +42,7 @@ class ProcessTasksCommandMixin(object):
         cls.thread.join()
 
 
-class PopulatePeriodicTaskCommandMixin(object):
+class PopulatePeriodicTaskCommandMixin:
     @classmethod
     def setUpClass(cls):
         assert (

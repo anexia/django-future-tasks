@@ -26,14 +26,18 @@ class Migration(migrations.Migration):
                 (
                     "periodic_task_id",
                     models.CharField(
-                        max_length=255, unique=True, verbose_name="periodic task ID"
+                        max_length=255,
+                        unique=True,
+                        verbose_name="periodic task ID",
                     ),
                 ),
                 ("type", models.CharField(max_length=255, verbose_name="Task type")),
                 (
                     "data",
                     models.JSONField(
-                        blank=True, null=True, verbose_name="Various execution data"
+                        blank=True,
+                        null=True,
+                        verbose_name="Various execution data",
                     ),
                 ),
                 (

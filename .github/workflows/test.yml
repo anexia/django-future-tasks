@@ -8,14 +8,20 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - '3.8'
           - '3.9'
           - '3.10'
           - '3.11'
+          - '3.12'
+          - '3.13'
         django-version:
-          - '3.2'
-          - '4.1'
           - '4.2'
+          - '5.0'
+          - '5.1'
+        exclude:
+          - python-version: '3.9'
+            django-version: '5.0'
+          - python-version: '3.9'
+            django-version: '5.1'
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +37,7 @@ jobs:
           pip install -r requirements.txt
           pip install django~=${{ matrix.django-version }}.0
 
-      - name: Run lint and code review with isort and black
+      - name: Run lint and code review
         run: |
           pre-commit run --all-files
       - name: Run tests with coverage
