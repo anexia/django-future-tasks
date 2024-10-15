@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
             model_name="periodicfuturetask",
             name="end_time",
             field=models.DateTimeField(
-                blank=True, null=True, verbose_name="Executions until"
+                blank=True,
+                null=True,
+                verbose_name="Executions until",
             ),
         ),
         migrations.AddConstraint(

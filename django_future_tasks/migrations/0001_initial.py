@@ -24,7 +24,9 @@ class Migration(migrations.Migration):
                 (
                     "task_id",
                     models.CharField(
-                        max_length=255, unique=True, verbose_name="task ID"
+                        max_length=255,
+                        unique=True,
+                        verbose_name="task ID",
                     ),
                 ),
                 (
@@ -37,7 +39,9 @@ class Migration(migrations.Migration):
                 (
                     "data",
                     models.JSONField(
-                        blank=True, null=True, verbose_name="Various execution data"
+                        blank=True,
+                        null=True,
+                        verbose_name="Various execution data",
                     ),
                 ),
                 ("type", models.CharField(max_length=255, verbose_name="Task type")),

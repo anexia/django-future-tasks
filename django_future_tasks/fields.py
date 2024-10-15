@@ -20,7 +20,7 @@ def _validate_CRON_string(value):
     p = re.compile(pattern)
     for i, c in enumerate(columns):
         if not p.match(c):
-            raise ValidationError("Incorrect value {} in column {}".format(c, i + 1))
+            raise ValidationError(f"Incorrect value {c} in column {i + 1}")
 
 
 class FutureTaskCronField(CronField):

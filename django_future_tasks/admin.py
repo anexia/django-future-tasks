@@ -7,7 +7,7 @@ from django_future_tasks.models import FutureTask, PeriodicFutureTask
 
 class FutureTaskAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(FutureTaskAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["type"].widget = forms.Select(choices=settings.FUTURE_TASK_TYPES)
 
     class Meta:
@@ -25,7 +25,7 @@ class FutureTaskAdmin(admin.ModelAdmin):
 
 class PeriodicFutureTaskAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(PeriodicFutureTaskAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["type"].widget = forms.Select(choices=settings.FUTURE_TASK_TYPES)
 
     class Meta:

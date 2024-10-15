@@ -44,7 +44,7 @@ class Command(BaseCommand):
         now = timezone.now()
         periodic_task_list = self.periodic_tasks_for_processing()
         logger.debug(
-            "Got {} periodic tasks for processing".format(len(periodic_task_list))
+            f"Got {len(periodic_task_list)} periodic tasks for processing",
         )
 
         for p_task in periodic_task_list:
@@ -89,7 +89,7 @@ class Command(BaseCommand):
 
             except Exception as exc:
                 logger.exception(
-                    "%s exception occurred ... " % (exc.__class__.__name__,)
+                    f"{exc.__class__.__name__} exception occurred...",
                 )
 
                 # As the database connection might have failed, we discard it here, so django will
@@ -97,7 +97,7 @@ class Command(BaseCommand):
                 db.close_old_connections()
 
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # The command will run as long as the `_running` attribute is
         # set to `True`. To safely quit the command, just set this attribute to `False` and the

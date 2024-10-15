@@ -74,7 +74,8 @@ class TestPeriodicFutureTasks(PopulatePeriodicTaskCommandMixin, TransactionTestC
         p_task.refresh_from_db()
         self.assertTrue(p_task.last_task_creation > self.original_last_task_creation)
         self.assertEqual(
-            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count(), 2
+            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count(),
+            2,
         )
 
         for task in FutureTask.objects.filter(periodic_parent_task_id=p_task.pk):
@@ -89,7 +90,7 @@ class TestPeriodicFutureTasks(PopulatePeriodicTaskCommandMixin, TransactionTestC
 
         p_task.refresh_from_db()
         self.assertFalse(
-            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).exists()
+            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).exists(),
         )
 
     def test_periodic_future_task_deactivation_and_activation(self):
@@ -113,7 +114,8 @@ class TestPeriodicFutureTasks(PopulatePeriodicTaskCommandMixin, TransactionTestC
 
         p_task.refresh_from_db()
         self.assertEqual(
-            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count(), 1
+            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count(),
+            1,
         )
         self.assertFalse(p_task.is_active)
 
@@ -125,7 +127,8 @@ class TestPeriodicFutureTasks(PopulatePeriodicTaskCommandMixin, TransactionTestC
 
         p_task.refresh_from_db()
         self.assertEqual(
-            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count(), 1
+            FutureTask.objects.filter(periodic_parent_task_id=p_task.pk).count(),
+            1,
         )
         self.assertFalse(p_task.is_active)
 

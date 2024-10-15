@@ -46,7 +46,8 @@ class Command(BaseCommand):
     @staticmethod
     def tasks_for_processing():
         return FutureTask.objects.filter(
-            eta__lte=timezone.now(), status=FutureTask.FUTURE_TASK_STATUS_OPEN
+            eta__lte=timezone.now(),
+            status=FutureTask.FUTURE_TASK_STATUS_OPEN,
         )
 
     @staticmethod
@@ -55,7 +56,7 @@ class Command(BaseCommand):
 
     def handle_tick(self):
         task_list = self.tasks_for_processing()
-        logger.debug("Got {} tasks for processing".format(len(task_list)))
+        logger.debug(f"Got {len(task_list)} tasks for processing")
 
         for task in task_list:
             task.status = FutureTask.FUTURE_TASK_STATUS_IN_PROGRESS
@@ -69,12 +70,14 @@ class Command(BaseCommand):
             except Exception as exc:
                 task.status = FutureTask.FUTURE_TASK_STATUS_ERROR
                 task.result = {
-                    "exception": "An exception of type {0} occurred.".format(
-                        type(exc).__name__
+                    "exception": "An exception of type {} occurred.".format(
+                        type(exc).__name__,
                     ),
                     "args": self._convert_exception_args(exc.args),
                     "traceback": traceback.format_exception(
-                        *sys.exc_info(), limit=None, chain=None
+                        *sys.exc_info(),
+                        limit=None,
+                        chain=None,
                     ),
                 }
                 logger.exception(exc)
@@ -97,7 +100,7 @@ class Command(BaseCommand):
 
             except Exception as exc:
                 logger.exception(
-                    "%s exception occurred ... " % (exc.__class__.__name__,)
+                    f"{exc.__class__.__name__} exception occurred...",
                 )
 
                 # As the database connection might have failed, we discard it here, so django will
@@ -105,7 +108,7 @@ class Command(BaseCommand):
                 db.close_old_connections()
 
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # The command will run as long as the `_running` attribute is
         # set to `True`. To safely quit the command, just set this attribute to `False` and the

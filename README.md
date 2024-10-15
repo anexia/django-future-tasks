@@ -61,9 +61,11 @@ python manage.py populate_periodic_future_tasks
 
 ## Django Compatibility Matrix
 
-If your project uses an older verison of Django or Django Rest Framework, you can choose an older version of this project.
+If your project uses an older version of Django or Django Rest Framework, you can choose an older version of this project.
 
-| This Project | Python Version       | Django Version |
-|--------------|----------------------|----------------|
-| 1.1.*        | 3.8, 3.9, 3.10, 3.11 | 3.2, 4.1, 4.2  |
-| 1.0.*        | 3.8, 3.9, 3.10, 3.11 | 3.2, 4.0, 4.1  |
+| This Project | Python Version              | Django Version |
+|--------------|-----------------------------|----------------|
+| 1.3.*        | 3.9, 3.10, 3.11, 3.12, 3.13 | 4.2, 5.0, 5.1  |
+| 1.2.*        | 3.8, 3.9, 3.10, 3.11        | 3.2, 4.1, 4.2  |
+| 1.1.*        | 3.8, 3.9, 3.10, 3.11        | 3.2, 4.1, 4.2  |
+| 1.0.*        | 3.8, 3.9, 3.10, 3.11        | 3.2, 4.0, 4.1  |

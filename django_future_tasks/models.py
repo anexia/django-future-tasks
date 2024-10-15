@@ -58,13 +58,18 @@ class FutureTask(models.Model):
     execution_time = models.FloatField(blank=True, null=True, help_text="in seconds")
 
     periodic_parent_task = models.ForeignKey(
-        "PeriodicFutureTask", on_delete=models.CASCADE, null=True, default=None
+        "PeriodicFutureTask",
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
     )
 
 
 class PeriodicFutureTask(models.Model):
     periodic_task_id = models.CharField(
-        _("periodic task ID"), max_length=255, unique=True
+        _("periodic task ID"),
+        max_length=255,
+        unique=True,
     )
     type = models.CharField(
         _("Task type"),
@@ -80,7 +85,9 @@ class PeriodicFutureTask(models.Model):
     cron_string = FutureTaskCronField()
     is_active = models.BooleanField(_("Active"), default=True)
     max_number_of_executions = models.IntegerField(
-        _("Maximal number of executions"), null=True, blank=True
+        _("Maximal number of executions"),
+        null=True,
+        blank=True,
     )
     end_time = models.DateTimeField(_("Executions until"), null=True, blank=True)
     __original_is_active = None
@@ -93,7 +100,7 @@ class PeriodicFutureTask(models.Model):
     def next_planned_execution(self):
         now = timezone.now()
         next_planned_execution = croniter.croniter(self.cron_string, now).get_next(
-            timezone.datetime
+            timezone.datetime,
         )
         if (
             not self.is_active
@@ -120,7 +127,11 @@ class PeriodicFutureTask(models.Model):
         self.__original_is_active = self.is_active
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
     ):
         if self.is_active and not self.__original_is_active:
             self.last_task_creation = datetime.datetime.now()
@@ -137,12 +148,12 @@ class PeriodicFutureTask(models.Model):
             raise ValidationError(
                 {
                     "end_time": _(
-                        "Cannot be set together with maximal number of executions, at least one must be empty."
+                        "Cannot be set together with maximal number of executions, at least one must be empty.",
                     ),
                     "max_number_of_executions": _(
-                        "Cannot be set together with execution end time, at least one must be empty."
+                        "Cannot be set together with execution end time, at least one must be empty.",
                     ),
-                }
+                },
             )
 
     class Meta:
@@ -151,5 +162,5 @@ class PeriodicFutureTask(models.Model):
                 check=Q(end_time__isnull=True)
                 | Q(max_number_of_executions__isnull=True),
                 name="not_both_not_null",
-            )
+            ),
         ]
