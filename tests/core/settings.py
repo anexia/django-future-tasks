@@ -103,12 +103,14 @@ FUTURE_TASK_TYPE_ONE = "task_one"
 FUTURE_TASK_TYPE_TWO = "task_two"
 FUTURE_TASK_TYPE_ERROR = "task_error"
 FUTURE_TASK_TYPE_INTERRUPTION = "task_interruption"
+FUTURE_TASK_TYPE_ETA_ORDERING = "task_eta_ordering"
 
 FUTURE_TASK_TYPES = (
     (FUTURE_TASK_TYPE_ONE, "Task 1"),
     (FUTURE_TASK_TYPE_TWO, "Task 2"),
     (FUTURE_TASK_TYPE_ERROR, "Task Error"),
     (FUTURE_TASK_TYPE_INTERRUPTION, "Task Interruption"),
+    (FUTURE_TASK_TYPE_ETA_ORDERING, "Task ETA Ordering"),
 )
 
 STATIC_URL = "/static/"

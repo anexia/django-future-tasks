@@ -13,3 +13,4 @@ django-cronfield>=0.2.0,<0.3
 
 # Linters and formatters
 pre-commit>=4.0.1,<4.1
+time-machine>=2.15.0,<2.17.0

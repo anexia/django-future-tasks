@@ -48,7 +48,7 @@ class Command(BaseCommand):
         return FutureTask.objects.filter(
             eta__lte=timezone.now(),
             status=FutureTask.FUTURE_TASK_STATUS_OPEN,
-        )
+        ).order_by("eta")
 
     @staticmethod
     def _convert_exception_args(args):
