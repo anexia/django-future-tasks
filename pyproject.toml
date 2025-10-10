@@ -1,0 +1,54 @@
+[project]
+name = "django-future-tasks"
+description = "A library to create periodic, cron-like tasks or single tasks with a specified execution/start time and schedule it to run in the future."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Armin Ster", email = "aster@anexia-it.com"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dynamic = ["version"]
+dependencies = [
+    "croniter>=3.0.3,<3.1",
+    "django-cronfield>=0.2.0,<0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "django>=4.2,<5.2",
+    "pre-commit>=4.3,<4.4",
+    "pytest>=8.4,<8.5",
+    "pytest-cov>=7.0,<7.1",
+    "pytest-django>=4.11,<4.12",
+    "time-machine>=2.15.0,<2.17.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/anexia/django-future-tasks"
+Documentation = "https://github.com/anexia/django-future-tasks/blob/main/README.md"
+Repository = "https://github.com/anexia/django-future-tasks"
+Issues = "https://github.com/anexia/django-future-tasks/issues"
+Changelog = "https://github.com/anexia/django-future-tasks/blob/main/CHANGELOG.md"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

@@ -20,9 +20,9 @@ class TestThread(Thread):
 class ProcessTasksCommandMixin:
     @classmethod
     def setUpClass(cls):
-        assert (
-            not hasattr(cls, "command_instance") or cls.command_instance is None
-        ), "process_future_tasks has already been started"
+        assert not hasattr(cls, "command_instance") or cls.command_instance is None, (
+            "process_future_tasks has already been started"
+        )
         print("Starting process_future_tasks...")
 
         cls.command_instance = ProcessTasksCommand()
@@ -32,9 +32,9 @@ class ProcessTasksCommandMixin:
 
     @classmethod
     def tearDownClass(cls):
-        assert (
-            cls.command_instance is not None
-        ), "process_future_tasks has not been started and can therefore not be stopped"
+        assert cls.command_instance is not None, (
+            "process_future_tasks has not been started and can therefore not be stopped"
+        )
         print("Stopping process_future_tasks...")
 
         super().tearDownClass()
@@ -45,9 +45,9 @@ class ProcessTasksCommandMixin:
 class PopulatePeriodicTaskCommandMixin:
     @classmethod
     def setUpClass(cls):
-        assert (
-            not hasattr(cls, "command_instance") or cls.command_instance is None
-        ), "populate_periodic_future_tasks has already been started"
+        assert not hasattr(cls, "command_instance") or cls.command_instance is None, (
+            "populate_periodic_future_tasks has already been started"
+        )
         print("Starting populate_periodic_future_tasks...")
 
         cls.command_instance = PopulatePeriodicTasksCommand()
@@ -57,9 +57,9 @@ class PopulatePeriodicTaskCommandMixin:
 
     @classmethod
     def tearDownClass(cls):
-        assert (
-            cls.command_instance is not None
-        ), "populate_periodic_future_tasks has not been started and can therefore not be stopped"
+        assert cls.command_instance is not None, (
+            "populate_periodic_future_tasks has not been started and can therefore not be stopped"
+        )
         print("Stopping populate_periodic_future_tasks...")
 
         super().tearDownClass()

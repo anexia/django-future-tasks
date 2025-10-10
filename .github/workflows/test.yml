@@ -24,7 +24,7 @@ jobs:
             django-version: '5.1'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies and package
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -e ".[dev]"
           pip install django~=${{ matrix.django-version }}.0
 
       - name: Run lint and code review
@@ -42,15 +42,8 @@ jobs:
           pre-commit run --all-files
       - name: Run tests with coverage
         run: |
-          # prepare Django project: link all necessary data from the test project into the root directory
-          # Hint: Simply changing the directory does not work (leads to missing files in coverage report)
-          ln -s ./tests/core core
-          ln -s ./tests/testapp testapp
-          ln -s ./tests/manage.py manage.py
           # run tests with coverage
-          coverage run \
-            --source='./django_future_tasks' \
-            manage.py test
+          pytest --cov=django_future_tasks tests
           coverage xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

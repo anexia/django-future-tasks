@@ -7,8 +7,8 @@ from django.test import TransactionTestCase
 from django.utils import timezone
 
 from django_future_tasks.models import FutureTask, PeriodicFutureTask
-from tests.core import settings
-from tests.testapp.mixins import PopulatePeriodicTaskCommandMixin
+from core import settings
+from testapp.mixins import PopulatePeriodicTaskCommandMixin
 
 SLEEP_TIME = 1.8
 

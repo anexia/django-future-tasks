@@ -10,8 +10,8 @@ from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 
 from django_future_tasks.models import FutureTask
-from tests.core import settings
-from tests.testapp.mixins import ProcessTasksCommandMixin
+from core import settings
+from testapp.mixins import ProcessTasksCommandMixin
 
 
 class WaitForTaskStatusTimeout(Exception):
