@@ -6,9 +6,9 @@ from django.core.exceptions import ValidationError
 from django.test import TransactionTestCase
 from django.utils import timezone
 
+from core import settings
 from django_future_tasks.models import FutureTask, PeriodicFutureTask
-from tests.core import settings
-from tests.testapp.mixins import PopulatePeriodicTaskCommandMixin
+from testapp.mixins import PopulatePeriodicTaskCommandMixin
 
 SLEEP_TIME = 1.8
 

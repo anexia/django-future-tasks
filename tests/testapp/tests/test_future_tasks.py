@@ -1,3 +1,4 @@
+import logging
 import os
 import signal
 import time
@@ -9,9 +10,11 @@ from django.core.management import call_command
 from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 
+from core import settings
 from django_future_tasks.models import FutureTask
-from tests.core import settings
-from tests.testapp.mixins import ProcessTasksCommandMixin
+from testapp.mixins import ProcessTasksCommandMixin
+
+logger = logging.getLogger(__name__)
 
 
 class WaitForTaskStatusTimeout(Exception):
@@ -67,7 +70,7 @@ class TestProcessFutureTasks(ProcessTasksCommandMixin, TransactionTestCase):
             eta=timezone.now(),
             type=settings.FUTURE_TASK_TYPE_ERROR,
         )
-        print(FutureTask.objects.all())
+        logger.info(FutureTask.objects.all())
         self.assertEqual(task.status, FutureTask.FUTURE_TASK_STATUS_OPEN)
         _wait_for_task_status(task, FutureTask.FUTURE_TASK_STATUS_ERROR)
         self.assertEqual(task.result["args"], ["task error"])

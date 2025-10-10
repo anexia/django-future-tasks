@@ -95,8 +95,6 @@ TIME_ZONE = "Europe/Vienna"
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 FUTURE_TASK_TYPE_ONE = "task_one"
@@ -116,3 +114,5 @@ FUTURE_TASK_TYPES = (
 STATIC_URL = "/static/"
 ROOT_URLCONF = "core.urls"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

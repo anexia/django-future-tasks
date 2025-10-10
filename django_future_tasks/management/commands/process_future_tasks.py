@@ -70,9 +70,7 @@ class Command(BaseCommand):
             except Exception as exc:
                 task.status = FutureTask.FUTURE_TASK_STATUS_ERROR
                 task.result = {
-                    "exception": "An exception of type {} occurred.".format(
-                        type(exc).__name__,
-                    ),
+                    "exception": f"An exception of type {type(exc).__name__} occurred.",
                     "args": self._convert_exception_args(exc.args),
                     "traceback": traceback.format_exception(
                         *sys.exc_info(),

@@ -5,4 +5,4 @@ class TestappConfig(AppConfig):
     name = "testapp"
 
     # import signal handlers
-    import tests.testapp.handlers
+    import testapp.handlers

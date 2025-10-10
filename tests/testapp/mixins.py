@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 
 from django.core.management import call_command
@@ -10,6 +11,8 @@ from django_future_tasks.management.commands.process_future_tasks import (
     Command as ProcessTasksCommand,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class TestThread(Thread):
     def run(self):
@@ -20,10 +23,10 @@ class TestThread(Thread):
 class ProcessTasksCommandMixin:
     @classmethod
     def setUpClass(cls):
-        assert (
-            not hasattr(cls, "command_instance") or cls.command_instance is None
-        ), "process_future_tasks has already been started"
-        print("Starting process_future_tasks...")
+        assert not hasattr(cls, "command_instance") or cls.command_instance is None, (
+            "process_future_tasks has already been started"
+        )
+        logger.info("Starting process_future_tasks...")
 
         cls.command_instance = ProcessTasksCommand()
         cls.thread = TestThread(target=call_command, args=(cls.command_instance,))
@@ -32,10 +35,10 @@ class ProcessTasksCommandMixin:
 
     @classmethod
     def tearDownClass(cls):
-        assert (
-            cls.command_instance is not None
-        ), "process_future_tasks has not been started and can therefore not be stopped"
-        print("Stopping process_future_tasks...")
+        assert cls.command_instance is not None, (
+            "process_future_tasks has not been started and can therefore not be stopped"
+        )
+        logger.info("Stopping process_future_tasks...")
 
         super().tearDownClass()
         cls.command_instance._handle_termination()
@@ -45,10 +48,10 @@ class ProcessTasksCommandMixin:
 class PopulatePeriodicTaskCommandMixin:
     @classmethod
     def setUpClass(cls):
-        assert (
-            not hasattr(cls, "command_instance") or cls.command_instance is None
-        ), "populate_periodic_future_tasks has already been started"
-        print("Starting populate_periodic_future_tasks...")
+        assert not hasattr(cls, "command_instance") or cls.command_instance is None, (
+            "populate_periodic_future_tasks has already been started"
+        )
+        logger.info("Starting populate_periodic_future_tasks...")
 
         cls.command_instance = PopulatePeriodicTasksCommand()
         cls.thread = TestThread(target=call_command, args=(cls.command_instance,))
@@ -57,10 +60,10 @@ class PopulatePeriodicTaskCommandMixin:
 
     @classmethod
     def tearDownClass(cls):
-        assert (
-            cls.command_instance is not None
-        ), "populate_periodic_future_tasks has not been started and can therefore not be stopped"
-        print("Stopping populate_periodic_future_tasks...")
+        assert cls.command_instance is not None, (
+            "populate_periodic_future_tasks has not been started and can therefore not be stopped"
+        )
+        logger.info("Stopping populate_periodic_future_tasks...")
 
         super().tearDownClass()
         cls.command_instance._handle_termination()

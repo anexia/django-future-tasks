@@ -4,8 +4,8 @@ from time import monotonic_ns
 
 from django.dispatch import receiver
 
+from core import settings
 from django_future_tasks.handlers import future_task_signal
-from tests.core import settings
 
 
 @receiver(future_task_signal, sender=intern(settings.FUTURE_TASK_TYPE_ONE))
