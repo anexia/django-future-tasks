@@ -1,12 +1,10 @@
-import datetime
-
 import croniter
+import django
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import JSONField, Q
-from django.utils import timezone
-from django.utils.dateformat import format
+from django.utils import dateformat, timezone
 from django.utils.translation import gettext_lazy as _
 
 from .fields import FutureTaskCronField
@@ -106,18 +104,16 @@ class PeriodicFutureTask(models.Model):
             not self.is_active
             or (
                 self.max_number_of_executions is not None
-                and FutureTask.objects.filter(periodic_parent_task=self.pk).count()
-                >= self.max_number_of_executions
+                and FutureTask.objects.filter(periodic_parent_task=self.pk).count() >= self.max_number_of_executions
             )
             or (
                 self.end_time is not None
-                and self.end_time
-                < croniter.croniter(self.cron_string, now).get_next(timezone.datetime)
+                and self.end_time < croniter.croniter(self.cron_string, now).get_next(timezone.datetime)
             )
         ):
             return None
 
-        return format(
+        return dateformat.format(
             timezone.template_localtime(next_planned_execution),
             settings.DATETIME_FORMAT,
         )
@@ -134,7 +130,7 @@ class PeriodicFutureTask(models.Model):
         update_fields=None,
     ):
         if self.is_active and not self.__original_is_active:
-            self.last_task_creation = datetime.datetime.now()
+            self.last_task_creation = timezone.now()
 
         self.clean()
         super().save()
@@ -159,8 +155,12 @@ class PeriodicFutureTask(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(
-                check=Q(end_time__isnull=True)
-                | Q(max_number_of_executions__isnull=True),
+                check=Q(end_time__isnull=True) | Q(max_number_of_executions__isnull=True),
+                name="not_both_not_null",
+            )
+            if django.VERSION < (5, 1)
+            else models.CheckConstraint(
+                condition=Q(end_time__isnull=True) | Q(max_number_of_executions__isnull=True),
                 name="not_both_not_null",
             ),
         ]

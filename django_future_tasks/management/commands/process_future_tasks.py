@@ -21,92 +21,6 @@ class Command(BaseCommand):
 
     current_task_pk = None
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--onetimerun",
-            action="append",
-            type=bool,
-            default=False,
-            help="Run command only one times",
-        )
-
-    def _handle_termination(self, *args, **kwargs):
-        try:
-            current_task = FutureTask.objects.get(pk=self.current_task_pk)
-            current_task.status = FutureTask.FUTURE_TASK_STATUS_INTERRUPTED
-            current_task.save()
-        except FutureTask.DoesNotExist:
-            pass
-        self._running = False
-
-    def _handle_options(self, options):
-        self.tick = 1
-        self.one_time_run = options["onetimerun"]
-
-    @staticmethod
-    def tasks_for_processing():
-        return FutureTask.objects.filter(
-            eta__lte=timezone.now(),
-            status=FutureTask.FUTURE_TASK_STATUS_OPEN,
-        ).order_by("eta")
-
-    @staticmethod
-    def _convert_exception_args(args):
-        return [str(arg) for arg in args]
-
-    def handle_tick(self):
-        task_list = self.tasks_for_processing()
-        logger.debug(f"Got {len(task_list)} tasks for processing")
-
-        for task in task_list:
-            task.status = FutureTask.FUTURE_TASK_STATUS_IN_PROGRESS
-            task.save()
-            self.current_task_pk = task.pk
-            try:
-                start_time = timeit.default_timer()
-                future_task_signal.send(sender=intern(task.type), instance=task)
-                task.execution_time = timeit.default_timer() - start_time
-                task.status = FutureTask.FUTURE_TASK_STATUS_DONE
-            except Exception as exc:
-                task.status = FutureTask.FUTURE_TASK_STATUS_ERROR
-                task.result = {
-                    "exception": "An exception of type {} occurred.".format(
-                        type(exc).__name__,
-                    ),
-                    "args": self._convert_exception_args(exc.args),
-                    "traceback": traceback.format_exception(
-                        *sys.exc_info(),
-                        limit=None,
-                        chain=None,
-                    ),
-                }
-                logger.exception(exc)
-            self.current_task_pk = None
-            task.save()
-
-        time.sleep(self.tick)
-
-    def handle(self, *args, **options):
-        # Load given options.
-        self._handle_options(options)
-
-        while self._running:
-            time.sleep(self.tick)
-
-            try:
-                self.handle_tick()
-                if self.one_time_run:
-                    break
-
-            except Exception as exc:
-                logger.exception(
-                    f"{exc.__class__.__name__} exception occurred...",
-                )
-
-                # As the database connection might have failed, we discard it here, so django will
-                # create a new one on the next database access.
-                db.close_old_connections()
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -119,3 +33,91 @@ class Command(BaseCommand):
         # getting a `SIGINT` or `SIGTERM` signal (e.g. by CTRL+C).
         signal.signal(signal.SIGINT, self._handle_termination)
         signal.signal(signal.SIGTERM, self._handle_termination)
+
+    def _handle_termination(self, *args, **kwargs):
+        # Mark the task as interrupted in case the command will receive a SIGKILL before the task was completed.
+        # If the command terminates graciously instead, the task will be finished and marked as done again by the
+        # main loop.
+        try:
+            current_task = FutureTask.objects.get(pk=self.current_task_pk)
+            current_task.status = FutureTask.FUTURE_TASK_STATUS_INTERRUPTED
+            current_task.save()
+        except FutureTask.DoesNotExist:
+            pass
+
+        self._running = False
+
+    def _handle_options(self, options):
+        self.one_time_run = options["one_time_run"]
+        self.wait_for_tasks_duration_seconds = options["wait_for_tasks_duration_seconds"]
+
+    def _get_open_tasks(self):
+        return FutureTask.objects.filter(
+            eta__lte=timezone.now(),
+            status=FutureTask.FUTURE_TASK_STATUS_OPEN,
+        ).order_by("eta")
+
+    def _endless_task_iterator(self):
+        while self._running:
+            tasks = self._get_open_tasks()
+            yield from tasks
+            if not tasks:
+                time.sleep(self.wait_for_tasks_duration_seconds)
+
+    @staticmethod
+    def _convert_exception_args(args):
+        return [str(arg) for arg in args]
+
+    def _handle_task(self, task):
+        task.status = FutureTask.FUTURE_TASK_STATUS_IN_PROGRESS
+        task.save()
+        self.current_task_pk = task.pk
+        try:
+            start_time = timeit.default_timer()
+            future_task_signal.send(sender=intern(task.type), instance=task)
+            task.execution_time = timeit.default_timer() - start_time
+            task.status = FutureTask.FUTURE_TASK_STATUS_DONE
+        except Exception as exception:
+            task.status = FutureTask.FUTURE_TASK_STATUS_ERROR
+            task.result = {
+                "exception": f"An exception of type {type(exception).__name__} occurred.",
+                "args": self._convert_exception_args(exception.args),
+                "traceback": traceback.format_exception(
+                    *sys.exc_info(),
+                    limit=None,
+                    chain=None,
+                ),
+            }
+            logger.exception(exception)
+        self.current_task_pk = None
+        task.save()
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--one-time-run",
+            action="store_true",
+            help="Process tasks that are open at the time of running the command and exit.",
+        )
+        parser.add_argument(
+            "--wait-for-tasks-duration-seconds",
+            type=float,
+            default=1.0,
+            help="If there are no open tasks the command waits this amount of time until it checks for open tasks again.",
+        )
+
+    def handle(self, *args, **options):
+        # Load given options.
+        self._handle_options(options)
+        tasks = iter(self._get_open_tasks()) if self.one_time_run else self._endless_task_iterator()
+        while self._running:
+            try:
+                self._handle_task(next(tasks))
+            except StopIteration:
+                break
+            except Exception as exc:
+                logger.exception(
+                    f"{exc.__class__.__name__} exception occurred...",
+                )
+                # As the database connection might have failed, we discard it here, so django will
+                # create a new one on the next database access.
+                db.close_old_connections()

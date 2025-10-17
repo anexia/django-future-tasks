@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name="django-future-tasks",
-    version=os.getenv("PACKAGE_VERSION", "1.3.0").replace("refs/tags/", ""),
+    version=os.getenv("PACKAGE_VERSION", "1.3.2").replace("refs/tags/", ""),
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -28,17 +28,17 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Framework :: Django",
         "Framework :: Django :: 4.2",
-        "Framework :: Django :: 5.0",
         "Framework :: Django :: 5.1",
+        "Framework :: Django :: 5.2",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
 )

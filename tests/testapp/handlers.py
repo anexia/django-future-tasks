@@ -4,8 +4,8 @@ from time import monotonic_ns
 
 from django.dispatch import receiver
 
+from core import settings
 from django_future_tasks.handlers import future_task_signal
-from tests.core import settings
 
 
 @receiver(future_task_signal, sender=intern(settings.FUTURE_TASK_TYPE_ONE))
@@ -25,7 +25,7 @@ def my_task_function_error(sender, instance, **kwargs):
 
 @receiver(future_task_signal, sender=intern(settings.FUTURE_TASK_TYPE_INTERRUPTION))
 def my_task_function_interruption(sender, instance, **kwargs):
-    time.sleep(10)
+    time.sleep(2)
 
 
 @receiver(future_task_signal, sender=intern(settings.FUTURE_TASK_TYPE_ETA_ORDERING))
